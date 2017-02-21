@@ -22,6 +22,10 @@ import java.util.Map;
  */
 public class JsonUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    /**  structure：
+     *   objectMapper   <-->   paraser/generator  <-->  JsonNode/ TargetClass
+     */
     static {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -31,11 +35,19 @@ public class JsonUtil {
     }
 
     public static void main(String[] args) throws IOException {
+        class TargetBean{
+            /** annotation
+             * 1、@JsonProperty("name")
+             * 2、@JsonIgnore
+             */
+            public String aa;
+
+        }
+
         /**
          *  1、(Json string)  <-->  (TargetClassObject)
          */
         String jsonString = "";
-
         TargetBean targetBean = objectMapper.readValue(jsonString,TargetBean.class);
         objectMapper.writeValueAsString(targetBean);
 
@@ -62,9 +74,6 @@ public class JsonUtil {
         }
         JsonGenerator jsonGenerator = objectMapper.getFactory().createGenerator(new ByteArrayOutputStream());
         jsonGenerator.writeTree(nodes);
-
     }
 }
-class TargetBean{
-    public String aa;
-}
+
